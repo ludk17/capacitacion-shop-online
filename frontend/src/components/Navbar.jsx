@@ -1,12 +1,25 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { ShoppingCart, User, Menu, X, Package } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext.jsx';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
   const { totalItems } = useCart();
   const navigate = useNavigate();
+  const userRef = useRef(null);
+
+  // Cierra el dropdown si se hace clic fuera
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (userRef.current && !userRef.current.contains(e.target)) {
+        setUserOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -48,16 +61,34 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Usuario */}
-            <button
-              id="btn-user"
-              className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 transition-colors text-slate-700"
-            >
-              <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center">
-                <User size={13} className="text-white" />
-              </div>
-              <span className="hidden sm:block text-sm font-medium">Mi cuenta</span>
-            </button>
+            {/* Usuario con dropdown */}
+            <div className="relative" ref={userRef}>
+              <button
+                id="btn-user"
+                onClick={() => setUserOpen(!userOpen)}
+                className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 transition-colors text-slate-700 cursor-pointer"
+              >
+                <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center">
+                  <User size={13} className="text-white" />
+                </div>
+                <span className="hidden sm:block text-sm font-medium">Mi cuenta</span>
+              </button>
+
+              {/* Dropdown */}
+              {userOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-white border border-slate-100 rounded-xl shadow-lg overflow-hidden z-50">
+                  <Link
+                    to="/mis-compras"
+                    id="link-mis-compras"
+                    onClick={() => setUserOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-3 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                  >
+                    <Package size={15} />
+                    Mis Compras
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* Hamburger – móvil */}
             <button

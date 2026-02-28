@@ -3,6 +3,9 @@ import { CartProvider } from './context/CartContext.jsx';
 import Navbar from './components/Navbar.jsx';
 import HomePage from './pages/HomePage.jsx';
 import CartPage from './pages/CartPage.jsx';
+import VentasPage from './pages/VentasPage.jsx';
+import VentaDetallePage from './pages/VentaDetallePage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
 
 export default function App() {
   return (
@@ -15,6 +18,9 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/carrito" element={<CartPage />} />
+              <Route path="/mis-compras" element={<VentasPage />} />
+              <Route path="/mis-compras/:id" element={<VentaDetallePage />} />
+              <Route path="/login" element={<LoginPage />} />
             </Routes>
           </div>
 
