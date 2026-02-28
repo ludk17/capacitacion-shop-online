@@ -62,7 +62,7 @@ export default function ProductCard({ producto }) {
           <button
             id={`btn-agregar-${producto.id}`}
             onClick={handleAgregar}
-            className={`flex items-center gap-1.5 text-white text-xs font-medium px-3 py-2 rounded-lg transition-all duration-200 active:scale-95
+            className={`flex items-center gap-1.5 text-white text-xs font-medium px-3 py-2 rounded-lg transition-all duration-200 active:scale-95 cursor-pointer
               ${agregado
                 ? 'bg-green-500'
                 : 'bg-indigo-600 hover:bg-indigo-700'

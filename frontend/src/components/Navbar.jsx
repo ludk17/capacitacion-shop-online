@@ -37,7 +37,7 @@ export default function Navbar() {
             <button
               id="btn-cart"
               onClick={() => navigate('/carrito')}
-              className="relative p-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+              className="relative p-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors cursor-pointer"
               aria-label="Ver carrito"
             >
               <ShoppingCart size={20} />
