@@ -1,0 +1,50 @@
+[
+  {
+    "nombre": "Laptop Lenovo IdeaPad",
+    "descripcion": "Laptop 15.6 pulgadas, Intel Core i5, 8GB RAM, 256GB SSD",
+    "precio": 2499.99,
+    "imagen": "/img/laptop-lenovo.png"
+  },
+  {
+    "nombre": "Mouse Inalámbrico Logitech",
+    "descripcion": "Mouse inalámbrico con receptor USB, 3 botones, diseño ergonómico",
+    "precio": 89.90,
+    "imagen": "/img/mouse-logitech.png"
+  },
+  {
+    "nombre": "Teclado Mecánico Redragon",
+    "descripcion": "Teclado mecánico RGB retroiluminado, switches azules, español",
+    "precio": 199.50,
+    "imagen": "/img/teclado-redragon.png"
+  },
+  {
+    "nombre": "Monitor Samsung 24\"",
+    "descripcion": "Monitor Full HD 1920x1080, panel IPS, 75Hz, HDMI + VGA",
+    "precio": 799.00,
+    "imagen": "/img/monitor-samsung.png"
+  },
+  {
+    "nombre": "Auriculares Sony WH-1000XM4",
+    "descripcion": "Auriculares Bluetooth con cancelación de ruido activa, 30h batería",
+    "precio": 1350.00,
+    "imagen": "/img/auriculares-sony.png"
+  },
+  {
+    "nombre": "Webcam Logitech C920",
+    "descripcion": "Cámara web Full HD 1080p, micrófono estéreo integrado, USB",
+    "precio": 349.90,
+    "imagen": "/img/webcam-logitech.png"
+  },
+  {
+    "nombre": "Disco Duro Externo WD 1TB",
+    "descripcion": "Disco duro portátil USB 3.0, 1TB, compatible con PC y Mac",
+    "precio": 229.00,
+    "imagen": "/img/disco-duro-wd.png"
+  },
+  {
+    "nombre": "Hub USB-C 7 en 1",
+    "descripcion": "Hub USB-C con HDMI 4K, 3x USB-A, SD/TF card, carga 100W",
+    "precio": 149.90,
+    "imagen": "/img/hub-usbc.png"
+  }
+]
