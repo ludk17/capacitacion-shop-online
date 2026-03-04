@@ -1,7 +1,7 @@
 import Database from "better-sqlite3";
-import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -43,6 +43,18 @@ db.exec(`
     precio_unitario REAL    NOT NULL,     -- snapshot del precio al momento de la compra
     cantidad        INTEGER NOT NULL CHECK(cantidad > 0),
     subtotal        REAL    NOT NULL      -- precio_unitario * cantidad
+  )
+`);
+
+// ─── Tabla usuarios ───────────────────────────────────────────────────────
+db.exec(`
+  CREATE TABLE IF NOT EXISTS usuarios (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre     TEXT    NOT NULL,
+    email      TEXT    NOT NULL UNIQUE,
+    password   TEXT    NOT NULL,
+    rol        TEXT    NOT NULL DEFAULT 'cliente' CHECK(rol IN ('admin', 'cliente')),
+    created_at TEXT    NOT NULL DEFAULT (datetime('now'))
   )
 `);
 

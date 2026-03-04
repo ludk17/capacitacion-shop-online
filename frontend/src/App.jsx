@@ -6,6 +6,7 @@ import CartPage from './pages/CartPage.jsx';
 import VentasPage from './pages/VentasPage.jsx';
 import VentaDetallePage from './pages/VentaDetallePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
               <Route path="/mis-compras" element={<VentasPage />} />
               <Route path="/mis-compras/:id" element={<VentaDetallePage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/registro" element={<RegisterPage />} />
             </Routes>
           </div>
 

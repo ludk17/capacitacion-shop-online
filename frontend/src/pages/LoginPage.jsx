@@ -117,12 +117,12 @@ export default function LoginPage() {
           {/* Registro */}
           <p className="text-center text-sm text-slate-500">
             ¿No tienes cuenta?{' '}
-            <button
-              type="button"
-              className="text-indigo-600 font-medium hover:text-indigo-800 transition-colors cursor-pointer"
+            <Link
+              to="/registro"
+              className="text-indigo-600 font-medium hover:text-indigo-800 transition-colors"
             >
               Regístrate
-            </button>
+            </Link>
           </p>
         </div>
 

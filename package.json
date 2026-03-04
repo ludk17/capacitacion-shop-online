@@ -9,9 +9,15 @@
   "scripts": {
     "backend": "npm run dev --workspace=backend",
     "frontend": "npm run dev --workspace=frontend",
-    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "newman": "^6.2.2"
   }
 }

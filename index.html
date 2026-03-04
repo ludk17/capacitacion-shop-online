@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomía de una Petición HTTP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --accent-purple: #a855f7;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .infographic-container {
+            background-color: var(--panel-bg);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* --- Estructura Principal --- */
+        .http-flow {
+            display: grid;
+            grid-template-columns: 1fr 100px 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        /* --- Paneles (Request / Response) --- */
+        .panel {
+            background-color: rgba(15, 23, 42, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-header i { font-size: 1.8rem; }
+        .panel-header h2 { font-size: 1.5rem; font-weight: 600; }
+
+        .request-header i { color: var(--accent-blue); }
+        .response-header i { color: var(--accent-green); }
+
+        /* --- Componentes de la Petición --- */
+        .component {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .component:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .comp-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .comp-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        /* --- Código / Ejemplos --- */
+        .code-block {
+            background-color: #000;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            border: 1px solid #334155;
+        }
+
+        .code-method { color: var(--accent-purple); font-weight: 600; }
+        .code-url { color: var(--accent-blue); }
+        .code-key { color: var(--accent-blue); }
+        .code-string { color: var(--accent-green); }
+        .code-number { color: var(--accent-orange); }
+
+        /* --- Elementos Visuales Específicos --- */
+        .method-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .badge-get { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+        .badge-post { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+        .badge-put { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+        .badge-del { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        /* --- Flechas Centrales --- */
+        .flow-arrows {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .arrow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .arrow-container i {
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+
+        .arrow-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- Status Codes Grid --- */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .s-200 { color: var(--accent-green); font-weight: 600; font-family: 'Fira Code';}
+        .s-400 { color: var(--accent-orange); font-weight: 600; font-family: 'Fira Code';}
+        .s-500 { color: var(--accent-red); font-weight: 600; font-family: 'Fira Code';}
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .http-flow {
+                grid-template-columns: 1fr;
+            }
+            .flow-arrows {
+                flex-direction: row;
+                padding: 20px 0;
+            }
+            .arrow-container i {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <header>
+            <h1>Anatomía de una Petición HTTP</h1>
+            <p>El estándar de comunicación entre Clientes (Programas/Navegadores) y Servidores (APIs)</p>
+        </header>
+
+        <div class="http-flow">
+            <!-- Columna Izquierda: REQUEST -->
+            <div class="panel">
+                <div class="panel-header request-header">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <h2>El Request (Petición)</h2>
+                </div>
+
+                <!-- Verbos / Métodos -->
+                <div class="component">
+                    <div class="comp-title" style="color: var(--accent-purple);">
+                        <i class="fa-solid fa-bolt"></i> 1. Método (Verbo)
+                    </div>
+                    <p class="comp-desc">Indica la <strong>acción</strong> que queremos realizar en el servidor.</p>
+                    <div class="method-badges">
+                        <span class="badge badge-get">GET (Leer)</span>
+                        <span class="badge badge-post">POST (Crear)</span>
+                        <span class="badge badge-put">PUT (Actualizar)</span>
+                        <span class="badge badge-del">DELETE (Borrar)</span>
+                    </div>
+                </div>
+
+                <!-- URL & Params -->
+                <div class="component">
+                    <div class="comp-title" style="color: var(--accent-blue);">
+                        <i class="fa-solid fa-link"></i> 2. Endpoint & Parámetros
+                    </div>
+                    <p class="comp-desc">La <strong>dirección exacta (URL)</strong> a la que llamamos. Puede incluir <em>Query Params</em> (filtros después del <code>?</code>) o <em>Path Params</em> (variables en la ruta).</p>
+                    <div class="code-block">
+                        <span class="code-method">GET</span> <span class="code-url">https://api.escuela.com/alumnos/</span><span style="color: #f472b6;">15</span><span style="color: #fbbf24;">?estado=activo</span><br>
+                        <span style="color: #64748b; font-size: 0.75rem;">// Path Param (ID: 15) | Query Param (Filtro: activo)</span>
+                    </div>
+                </div>
+
+                <!-- Headers -->
+                <div class="component">
+                    <div class="comp-title" style="color: var(--accent-orange);">
+                        <i class="fa-solid fa-tags"></i> 3. Headers (Cabeceras)
+                    </div>
+                    <p class="comp-desc">Metadatos <strong>ocultos</strong> que dan contexto sobre la petición (Seguridad, formato de datos, idioma).</p>
+                    <div class="code-block">
+                        <span class="code-key">Authorization:</span> <span class="code-string">Bearer eyJhbGci...</span><br>
+                        <span class="code-key">Content-Type:</span> <span class="code-string">application/json</span>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="component">
+                    <div class="comp-title" style="color: #cbd5e1;">
+                        <i class="fa-solid fa-box-open"></i> 4. Body (Cuerpo)
+                    </div>
+                    <p class="comp-desc">La <strong>carga útil (datos)</strong> que enviamos al servidor. Se usa principalmente en <code>POST</code> y <code>PUT</code>. Formato estándar: JSON.</p>
+                    <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="code-key">"nombre"</span>: <span class="code-string">"Ana Torres"</span>,<br>
+&nbsp;&nbsp;<span class="code-key">"curso"</span>: <span class="code-string">"Automatización"</span><br>
+}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Central: FLECHAS -->
+            <div class="flow-arrows">
+                <div class="arrow-container">
+                    <span class="arrow-label">Request</span>
+                    <i class="fa-solid fa-arrow-right-long" style="color: var(--accent-blue);"></i>
+                </div>
+                <div class="arrow-container">
+                    <i class="fa-solid fa-arrow-left-long" style="color: var(--accent-green);"></i>
+                    <span class="arrow-label">Response</span>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: RESPONSE -->
+            <div class="panel">
+                <div class="panel-header response-header">
+                    <i class="fa-solid fa-server"></i>
+                    <h2>El Response (Respuesta)</h2>
+                </div>
+
+                <!-- Status Code -->
+                <div class="component">
+                    <div class="comp-title" style="color: var(--accent-green);">
+                        <i class="fa-solid fa-traffic-light"></i> 1. Status Code
+                    </div>
+                    <p class="comp-desc">Un número de 3 dígitos que indica <strong>cómo resultó</strong> la petición. Es lo primero que validamos en automatización.</p>
+                    <div class="status-grid">
+                        <div class="status-item"><span class="s-200">200 OK</span> Éxito general</div>
+                        <div class="status-item"><span class="s-200">201 Created</span> Recurso creado</div>
+                        <div class="status-item"><span class="s-400">400 Bad Req</span> Error del cliente</div>
+                        <div class="status-item"><span class="s-400">401 Unauth</span> Falta Token</div>
+                        <div class="status-item"><span class="s-400">404 Not Found</span> No existe</div>
+                        <div class="status-item"><span class="s-500">500 Server Err</span> Fallo la API</div>
+                    </div>
+                </div>
+
+                <!-- Response Headers -->
+                <div class="component">
+                    <div class="comp-title" style="color: var(--accent-orange);">
+                        <i class="fa-solid fa-tags"></i> 2. Headers (Servidor)
+                    </div>
+                    <p class="comp-desc">Información adicional que el servidor nos devuelve sobre la respuesta (tiempo, tamaño, tipo de servidor).</p>
+                    <div class="code-block">
+                        <span class="code-key">Date:</span> <span class="code-string">Tue, 03 Mar 2026 12:00:00 GMT</span><br>
+                        <span class="code-key">Content-Type:</span> <span class="code-string">application/json</span><br>
+                        <span class="code-key">X-Powered-By:</span> <span class="code-string">Express</span>
+                    </div>
+                </div>
+
+                <!-- Response Body -->
+                <div class="component">
+                    <div class="comp-title" style="color: #cbd5e1;">
+                        <i class="fa-solid fa-box"></i> 3. Body (Datos devueltos)
+                    </div>
+                    <p class="comp-desc">La <strong>información que solicitamos</strong> o la confirmación de la acción. Aquí es donde hacemos nuestras aserciones principales (Tests).</p>
+                    <div class="code-block">
+{<br>
+&nbsp;&nbsp;<span class="code-key">"id"</span>: <span class="code-number">101</span>,<br>
+&nbsp;&nbsp;<span class="code-key">"nombre"</span>: <span class="code-string">"Ana Torres"</span>,<br>
+&nbsp;&nbsp;<span class="code-key">"createdAt"</span>: <span class="code-string">"2026-03-03T12:00:00Z"</span><br>
+}
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; padding: 15px; background: rgba(56, 189, 248, 0.1); border-radius: 8px; border: 1px dashed var(--accent-blue);">
+                    <p style="font-size: 0.9rem; font-weight: 600; color: var(--accent-blue);">
+                        <i class="fa-solid fa-check-double"></i> Misión del Tester:
+                    </p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">
+                        Controlar exactamente qué enviamos en el <strong>Request</strong> y automatizar la validación de cada pieza del <strong>Response</strong>.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X, Package } from 'lucide-react';
+import { ShoppingCart, User, Menu, X, Package, LogIn, UserPlus } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/CartContext.jsx';
 
@@ -76,7 +76,7 @@ export default function Navbar() {
 
               {/* Dropdown */}
               {userOpen && (
-                <div className="absolute right-0 mt-2 w-44 bg-white border border-slate-100 rounded-xl shadow-lg overflow-hidden z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg overflow-hidden z-50">
                   <Link
                     to="/mis-compras"
                     id="link-mis-compras"
@@ -85,6 +85,25 @@ export default function Navbar() {
                   >
                     <Package size={15} />
                     Mis Compras
+                  </Link>
+                  <hr className="border-slate-100" />
+                  <Link
+                    to="/login"
+                    id="link-login"
+                    onClick={() => setUserOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-3 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                  >
+                    <LogIn size={15} />
+                    Iniciar sesión
+                  </Link>
+                  <Link
+                    to="/registro"
+                    id="link-registro"
+                    onClick={() => setUserOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-3 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                  >
+                    <UserPlus size={15} />
+                    Registrarse
                   </Link>
                 </div>
               )}
