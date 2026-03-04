@@ -55,7 +55,7 @@ export default function RegisterPage() {
       if (res.ok) {
         setSuccess(true);
         // Redirigir al login después de 2 segundos
-        setTimeout(() => navigate('/login'), 2000);
+        // setTimeout(() => navigate('/login'), 2000);
       } else {
         setError(data.error || 'Ocurrió un error al registrar el usuario.');
       }
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                 <CheckCircle size={30} className="text-green-500" />
               </div>
               <div>
-                <p className="text-slate-800 font-semibold text-lg">¡Cuenta creada!</p>
+                <p id="registro-exito" className="text-slate-800 font-semibold text-lg">¡Cuenta creada!</p>
                 <p className="text-slate-400 text-sm mt-1">
                   Tu cuenta fue registrada exitosamente.<br />
                   Redirigiendo al inicio de sesión…
