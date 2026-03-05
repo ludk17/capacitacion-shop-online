@@ -53,5 +53,6 @@ coverage/
 /playwright/.auth/
 
 
-/backend/db/shop.db
-/backend/db/shop.db*
+/backend/src/db/shop.db
+/backend/src/db/shop.db*
+
