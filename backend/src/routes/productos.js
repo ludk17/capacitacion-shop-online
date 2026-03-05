@@ -4,6 +4,7 @@ import { extname, join } from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import db from "../db/database.js";
+import { createConcurrencyLimiter } from "../middlewares/concurrencyLimiter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,9 +39,14 @@ const upload = multer({
 
 const router = Router();
 
+// ─── Middleware: Límite de Concurrencia (solo GET productos) ───────────────
+// Para desactivar: setear CONCURRENCY_LIMIT_ENABLED=false en el entorno
+// Para cambiar el límite: setear CONCURRENCY_LIMIT_MAX=<número> (default: 20)
+const concurrencyLimiter = createConcurrencyLimiter();
+
 // ─── GET /api/productos ────────────────────────────────────────────────────
 // Retorna todos los productos
-router.get("/", (req, res) => {
+router.get("/", concurrencyLimiter, (req, res) => {
   try {
     const productos = db.prepare("SELECT * FROM productos").all();
     res.json(productos);
@@ -51,7 +57,7 @@ router.get("/", (req, res) => {
 
 // ─── GET /api/productos/:id ────────────────────────────────────────────────
 // Retorna un producto por ID
-router.get("/:id", (req, res) => {
+router.get("/:id", concurrencyLimiter, (req, res) => {
   try {
     const producto = db
       .prepare("SELECT * FROM productos WHERE id = ?")

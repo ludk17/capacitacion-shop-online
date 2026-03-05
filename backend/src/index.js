@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import productosRouter from "./routes/productos.js";
 import ventasRouter from "./routes/ventas.js";
 import usuariosRouter from "./routes/usuarios.js";
+import fakeLoginRouter from "./routes/fakeLogin.js";
 import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,6 +24,7 @@ app.use(express.static(join(__dirname, "../public")));
 app.use("/api/productos", productosRouter);
 app.use("/api/ventas", ventasRouter);
 app.use("/api/usuarios", usuariosRouter);
+app.use("/api/fakeLogin", fakeLoginRouter);
 
 
 // ─── Health check ──────────────────────────────────────────────────────────
