@@ -49,7 +49,7 @@ const concurrencyLimiter = createConcurrencyLimiter();
 router.get("/", concurrencyLimiter, (req, res) => {
   try {
     const productos = db.prepare("SELECT * FROM productos").all();
-    res.json(productos);
+    res.status(400).json(productos);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener productos", detalle: error.message });
   }
